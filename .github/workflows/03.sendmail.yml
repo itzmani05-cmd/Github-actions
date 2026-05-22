@@ -1,28 +1,64 @@
-name: Send mail
+name: Commit Notification Mail
 on: push
 
 jobs: 
-  mail:
+  send-mail:
     runs-on: ubuntu-latest
 
     steps: 
-    - name: Print Hello world
+    - name: Send Email Notification
       run: echo "Hello world"
     
     - name: Sending a mail
-      if: ${{always}}
       uses: devellany/send-mailer@v1.0.2
       with:
-        host: smtp.google.com
+        host: smtp.gmail.com
         port: 465
 
-        account: ${{secrets.ACCOUNT}}
+        account: ${{secrets.MAIL_USERNAME}}
         password: ${{secrets.MAIL_PASSWORD}}
 
-        sender: devellany
-        from: ${{secrets.MAIL_ADDRESS}}
+        sender: ${{secrets.MAIL_USERNAME}}
         to: itzmani2005@gmail.com
-        subject: ${{github.job}} job of ${{github.repository}} has ${{job.status}}
-        body: ${{github.job}} job in workflow ${{github.workflow}} of ${{github.repository}} has ${{job.status}}.
-        contentType: text/plain
-        attachments: '[{"path":"README.md"}]'
+        subject: "New Commit in Repository"
+        
+        body: |
+          Repository: ${{ github.repository }}
+
+          Committed By: ${{ github.actor }}
+          Commit Message:
+          ${{ github.event.head_commit.message }}
+
+          Commit Time:
+          ${{ github.event.head_commit.timestamp }}
+
+          Branch:
+          ${{ github.ref_name }}
+
+          Commit URL:
+          ${{ github.event.head_commit.url }}
+
+        html: |
+          <h2>🚀 New Commit Pushed</h2>
+
+          <p><strong>Repository:</strong> ${{ github.repository }}</p>
+
+          <p><strong>Committed By:</strong> ${{ github.actor }}</p>
+
+          <p><strong>Commit Message:</strong></p>
+          <blockquote>
+            ${{ github.event.head_commit.message }}
+          </blockquote>
+
+          <p><strong>Commit Time:</strong>
+          ${{ github.event.head_commit.timestamp }}</p>
+
+          <p><strong>Branch:</strong>
+          ${{ github.ref_name }}</p>
+
+          <p>
+            <a href="${{ github.event.head_commit.url }}">
+              View Commit
+            </a>
+          </p>
+       
