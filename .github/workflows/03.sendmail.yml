@@ -1,64 +1,71 @@
 name: Commit Notification Mail
-on: push
 
-jobs: 
+on:
+  push:
+
+jobs:
   send-mail:
     runs-on: ubuntu-latest
 
-    steps: 
-    - name: Send Email Notification
-      run: echo "Hello world"
-    
-    - name: Sending a mail
-      uses: devellany/send-mailer@v1.0.2
-      with:
-        host: smtp.gmail.com
-        port: 465
+    steps:
+      - name: Send Email Notification
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
 
-        account: ${{secrets.MAIL_USERNAME}}
-        password: ${{secrets.MAIL_PASSWORD}}
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
 
-        sender: ${{secrets.MAIL_USERNAME}}
-        to: itzmani2005@gmail.com
-        subject: "New Commit in Repository"
-        
-        body: |
-          Repository: ${{ github.repository }}
+          subject: "🚀 New Commit in Repository"
 
-          Committed By: ${{ github.actor }}
-          Commit Message:
-          ${{ github.event.head_commit.message }}
+          to: itzmani2005@gmail.com
+          from: ${{ secrets.MAIL_USERNAME }}
 
-          Commit Time:
-          ${{ github.event.head_commit.timestamp }}
+          body: |
+            🚀 New Commit Pushed
 
-          Branch:
-          ${{ github.ref_name }}
+            Repository: ${{ github.repository }}
 
-          Commit URL:
-          ${{ github.event.head_commit.url }}
+            Committed By:
+            ${{ github.actor }}
 
-        html: |
-          <h2>🚀 New Commit Pushed</h2>
-
-          <p><strong>Repository:</strong> ${{ github.repository }}</p>
-
-          <p><strong>Committed By:</strong> ${{ github.actor }}</p>
-
-          <p><strong>Commit Message:</strong></p>
-          <blockquote>
+            Commit Message:
             ${{ github.event.head_commit.message }}
-          </blockquote>
 
-          <p><strong>Commit Time:</strong>
-          ${{ github.event.head_commit.timestamp }}</p>
+            Commit Time:
+            ${{ github.event.head_commit.timestamp }}
 
-          <p><strong>Branch:</strong>
-          ${{ github.ref_name }}</p>
+            Branch:
+            ${{ github.ref_name }}
 
-          <p>
-            <a href="${{ github.event.head_commit.url }}">
-              View Commit
-            </a>
-          </p>
-       
+            Commit URL:
+            ${{ github.event.head_commit.url }}
+
+          html_body: |
+            <h2>🚀 New Commit Pushed</h2>
+
+            <p><strong>Repository:</strong>
+            ${{ github.repository }}</p>
+
+            <p><strong>Committed By:</strong>
+            ${{ github.actor }}</p>
+
+            <p><strong>Commit Message:</strong></p>
+
+            <blockquote>
+              ${{ github.event.head_commit.message }}
+            </blockquote>
+
+            <p><strong>Commit Time:</strong>
+            ${{ github.event.head_commit.timestamp }}</p>
+
+            <p><strong>Branch:</strong>
+            ${{ github.ref_name }}</p>
+
+            <p>
+              <a href="${{ github.event.head_commit.url }}">
+                View Commit
+              </a>
+            </p>
