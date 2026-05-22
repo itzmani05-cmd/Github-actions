@@ -1,0 +1,28 @@
+name: Send mail
+on: push
+
+jobs: 
+  mail:
+    runs-on: ubuntu-latest
+
+    steps: 
+    - name: Print Hello world
+      run: echo "Hello world"
+    
+    - name: Sending a mail
+      if: ${{always}}
+      uses: devellany/send-mailer@v1.0.2
+      with:
+        host: smtp.google.com
+        port: 465
+
+        account: ${{secrets.ACCOUNT}}
+        password: ${{secrets.MAIL_PASSWORD}}
+
+        sender: devellany
+        from: ${{secrets.MAIL_ADDRESS}}
+        to: itzmani2005@gmail.com
+        subject: ${{github.job}} job of ${{github.repository}} has ${{job.status}}
+        body: ${{github.job}} job in workflow ${{github.workflow}} of ${{github.repository}} has ${{job.status}}.
+        contentType: text/plain
+        attachments: '[{"path":"README.md"}]'
