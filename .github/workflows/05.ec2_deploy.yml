@@ -41,4 +41,4 @@ jobs:
             echo "Restarting Nginx..."
             sudo systemctl restart nginx
 
-            echo "Deployment Completed!"
+            echo "Deployment Completed!!"
