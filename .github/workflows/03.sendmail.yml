@@ -44,7 +44,7 @@ jobs:
             ${{ github.event.head_commit.url }}
 
           html_body: |
-            <h2>🚀 New Commit Pushed</h2>
+            <h2>New Commit Pushed</h2>
 
             <p><strong>Repository:</strong>
             ${{ github.repository }}</p>
